@@ -1,45 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAdmin } from './entities/user-admin.entity';
-import { CreateUserAdminDto } from './dto/create-user-admin.dto';
-import { UpdateUserAdminDto } from './dto/update-user-admin.dto';
+import { UsersAdmin } from './entities/user-admin.entity';
 
 @Injectable()
-export class UserAdminService {
+export class UsersAdminService {
   constructor(
-    @InjectRepository(UserAdmin)
-    private readonly userAdminRepository: Repository<UserAdmin>,
+    @InjectRepository(UsersAdmin)
+    private usersRepository: Repository<UsersAdmin>,
   ) {}
 
-  async create(createUserAdminDto: CreateUserAdminDto): Promise<UserAdmin> {
-    const newUserAdmin = this.userAdminRepository.create(createUserAdminDto);
-    return await this.userAdminRepository.save(newUserAdmin);
+  async findOne(username: string): Promise<UsersAdmin | undefined> {
+    return this.usersRepository.findOne({ where: { nome: username } });
   }
 
-  async findAll(): Promise<UserAdmin[]> {
-    return await this.userAdminRepository.find();
+  async create(
+    nome: string,
+    email: string,
+    senha: string,
+  ): Promise<UsersAdmin> {
+    const user = this.usersRepository.create({ nome, email, senha });
+    return this.usersRepository.save(user);
   }
 
-  async findOne(id: number): Promise<UserAdmin> {
-    const userAdmin = await this.userAdminRepository.findOneBy({ id });
-    if (!userAdmin) {
-      throw new NotFoundException(`UserAdmin with ID ${id} not found`);
-    }
-    return userAdmin;
-  }
-
-  async update(
-    id: number,
-    updateUserAdminDto: UpdateUserAdminDto,
-  ): Promise<UserAdmin> {
-    const userAdmin = await this.findOne(id);
-    this.userAdminRepository.merge(userAdmin, updateUserAdminDto);
-    return await this.userAdminRepository.save(userAdmin);
-  }
-
-  async remove(id: number): Promise<void> {
-    const userAdmin = await this.findOne(id);
-    await this.userAdminRepository.remove(userAdmin);
+  async findOneByEmail(email: string): Promise<UsersAdmin | undefined> {
+    return this.usersRepository.findOne({ where: { email } });
   }
 }

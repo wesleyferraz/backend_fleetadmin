@@ -1,5 +1,7 @@
 // update-motorista.dto.ts
-import { PartialType } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/mapped-types';
 import { CreateMotoristaDto } from './create-motorista.dto';
 
-export class UpdateMotoristaDto extends PartialType(CreateMotoristaDto) {}
+export class UpdateMotoristaDto extends PartialType(CreateMotoristaDto) {
+  enderecoId?: number; // Permitindo que o enderecoId seja opcional
+}

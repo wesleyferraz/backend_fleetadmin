@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PecaTrocaCorretivaService } from './peca-troca-corretiva.service';
-import { CreatePecaTrocaCorretivaDto } from './dto/create-peca-troca-corretiva.dto';
-import { UpdatePecaTrocaCorretivaDto } from './dto/update-peca-troca-corretiva.dto';
+import { CreatePecaTrocadaCorretivaDto } from './dto/create-peca-troca-corretiva.dto';
+import { UpdatePecaTrocadaCorretivaDto } from './dto/update-peca-troca-corretiva.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Peça Troca Corretiva')
@@ -20,7 +20,7 @@ export class PecaTrocaCorretivaController {
   ) {}
 
   @Post()
-  create(@Body() createPecaTrocaCorretivaDto: CreatePecaTrocaCorretivaDto) {
+  create(@Body() createPecaTrocaCorretivaDto: CreatePecaTrocadaCorretivaDto) {
     return this.pecaTrocaCorretivaService.create(createPecaTrocaCorretivaDto);
   }
 
@@ -37,7 +37,7 @@ export class PecaTrocaCorretivaController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updatePecaTrocaCorretivaDto: UpdatePecaTrocaCorretivaDto,
+    @Body() updatePecaTrocaCorretivaDto: UpdatePecaTrocadaCorretivaDto,
   ) {
     return this.pecaTrocaCorretivaService.update(
       +id,

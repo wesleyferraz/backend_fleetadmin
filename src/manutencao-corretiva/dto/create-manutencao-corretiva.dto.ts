@@ -1,5 +1,6 @@
 // create-manutencao-corretiva.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
+
 export class CreateManutencaoCorretivaDto {
   @ApiProperty()
   data: Date;
@@ -11,8 +12,8 @@ export class CreateManutencaoCorretivaDto {
   valorTotal: number;
 
   @ApiProperty()
-  oficina_id: number;
+  oficinaId: number;
 
   @ApiProperty()
-  veiculo_id: number;
+  veiculoId: number;
 }

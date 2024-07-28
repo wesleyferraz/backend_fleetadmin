@@ -9,5 +9,5 @@ export class CreateOficinaDto {
   razaoSocial: string;
 
   @ApiProperty()
-  endereco_id: number;
+  enderecoId: number;
 }

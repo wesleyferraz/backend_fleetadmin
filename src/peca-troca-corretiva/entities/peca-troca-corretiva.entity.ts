@@ -1,4 +1,4 @@
-// peca-troca-corretiva.entity.ts
+// pecas-trocadas-corretiva.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,24 +6,27 @@ import {
   JoinColumn,
   Column,
 } from 'typeorm';
-import { ManutencaoCorretiva } from 'src/manutencao-corretiva/entities/manutencao-corretiva.entity';
-import { Peca } from 'src/peca/entities/peca.entity';
+import { ManutencoesCorretivas } from 'src/manutencao-corretiva/entities/manutencao-corretiva.entity';
+import { Pecas } from 'src/peca/entities/peca.entity';
 @Entity()
-export class PecaTrocaCorretiva {
+export class PecasTrocadasCorretiva {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(
-    () => ManutencaoCorretiva,
-    (manutencaoCorretiva) => manutencaoCorretiva.id,
-  )
-  @JoinColumn({ name: 'manutencao_corretiva_id' })
-  manutencaoCorretiva: ManutencaoCorretiva;
+  @ManyToOne(() => ManutencoesCorretivas)
+  @JoinColumn({ name: 'manutencaoCorretivaId' })
+  manutencaoCorretiva: ManutencoesCorretivas;
 
-  @ManyToOne(() => Peca, (peca) => peca.id)
-  @JoinColumn({ name: 'peca_id' })
-  peca: Peca;
+  @ManyToOne(() => Pecas, (peca) => peca.id)
+  @JoinColumn({ name: 'pecaId' })
+  peca: Pecas;
 
-  @Column({ name: 'valor', type: 'decimal', precision: 10, scale: 2 })
-  valor: number;
+  @Column({ name: 'quantidade', type: 'decimal', precision: 10, scale: 2 })
+  quantidade: number;
+
+  @Column({ name: 'valorUnitario', type: 'decimal', precision: 10, scale: 2 })
+  valorUnitario: number;
+
+  @Column({ name: 'valorTotal', type: 'decimal', precision: 10, scale: 2 })
+  valorTotal: number;
 }

@@ -6,17 +6,17 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Seguradora } from 'src/seguradora/entities/seguradora.entity';
-import { Veiculo } from 'src/veiculo/entities/veiculo.entity';
+import { Seguradoras } from 'src/seguradora/entities/seguradora.entity';
+import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
 
 @Entity()
-export class Seguro {
+export class Seguros {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Seguradora, (seguradora) => seguradora.id)
-  @JoinColumn({ name: 'seguradora_id' })
-  seguradora: Seguradora;
+  @ManyToOne(() => Seguradoras, (seguradora) => seguradora.id)
+  @JoinColumn({ name: 'seguradoraId' })
+  seguradoraId: Seguradoras;
 
   @Column({ name: 'numeroContrato' })
   numeroContrato: string;
@@ -27,7 +27,7 @@ export class Seguro {
   @Column({ name: 'valorMensal', type: 'decimal', precision: 10, scale: 2 })
   valorMensal: number;
 
-  @ManyToOne(() => Veiculo, (veiculo) => veiculo.id)
-  @JoinColumn({ name: 'veiculo_id' })
-  veiculo: Veiculo;
+  @ManyToOne(() => Veiculos)
+  @JoinColumn({ name: 'veiculoId' })
+  veiculoId: Veiculos;
 }

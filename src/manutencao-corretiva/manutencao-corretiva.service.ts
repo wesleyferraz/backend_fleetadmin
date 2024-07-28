@@ -1,35 +1,60 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ManutencaoCorretiva } from './entities/manutencao-corretiva.entity';
+import { ManutencoesCorretivas } from './entities/manutencao-corretiva.entity';
 import { CreateManutencaoCorretivaDto } from './dto/create-manutencao-corretiva.dto';
 import { UpdateManutencaoCorretivaDto } from './dto/update-manutencao-corretiva.dto';
+import { Oficinas } from 'src/oficina/entities/oficina.entity';
+import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
 
 @Injectable()
 export class ManutencaoCorretivaService {
   constructor(
-    @InjectRepository(ManutencaoCorretiva)
-    private readonly manutencaoCorretivaRepository: Repository<ManutencaoCorretiva>,
+    @InjectRepository(ManutencoesCorretivas)
+    private readonly manutencaoCorretivaRepository: Repository<ManutencoesCorretivas>,
+    @InjectRepository(Oficinas)
+    private readonly oficinaRepository: Repository<Oficinas>,
+    @InjectRepository(Veiculos)
+    private readonly veiculoRepository: Repository<Veiculos>,
   ) {}
 
   async create(
     createManutencaoCorretivaDto: CreateManutencaoCorretivaDto,
-  ): Promise<ManutencaoCorretiva> {
-    const newManutencaoCorretiva = this.manutencaoCorretivaRepository.create(
-      createManutencaoCorretivaDto,
-    );
-    return await this.manutencaoCorretivaRepository.save(
-      newManutencaoCorretiva,
-    );
+  ): Promise<ManutencoesCorretivas> {
+    const oficina = await this.oficinaRepository.findOne({
+      where: { id: createManutencaoCorretivaDto.oficinaId },
+    });
+    const veiculo = await this.veiculoRepository.findOne({
+      where: { id: createManutencaoCorretivaDto.veiculoId },
+    });
+
+    if (!oficina || !veiculo) {
+      throw new NotFoundException('Oficina ou Veículo não encontrado');
+    }
+
+    const manutencaoCorretiva = new ManutencoesCorretivas();
+    manutencaoCorretiva.data = new Date(createManutencaoCorretivaDto.data);
+    manutencaoCorretiva.kmManutencao =
+      createManutencaoCorretivaDto.kmManutencao;
+    manutencaoCorretiva.valorTotal = createManutencaoCorretivaDto.valorTotal;
+    manutencaoCorretiva.oficinaId = oficina;
+    manutencaoCorretiva.veiculoId = veiculo;
+
+    return await this.manutencaoCorretivaRepository.save(manutencaoCorretiva);
   }
 
-  async findAll(): Promise<ManutencaoCorretiva[]> {
-    return await this.manutencaoCorretivaRepository.find();
+  async findAll(): Promise<ManutencoesCorretivas[]> {
+    return await this.manutencaoCorretivaRepository.find({
+      relations: ['veiculoId', 'oficinaId'],
+    });
   }
 
-  async findOne(id: number): Promise<ManutencaoCorretiva> {
+  async findOne(id: number): Promise<ManutencoesCorretivas> {
     const manutencaoCorretiva =
-      await this.manutencaoCorretivaRepository.findOneBy({ id });
+      await this.manutencaoCorretivaRepository.findOne({
+        where: { id },
+        relations: ['veiculoId', 'oficinaId'],
+      });
     if (!manutencaoCorretiva) {
       throw new NotFoundException(
         `Manutencao Corretiva with ID ${id} not found`,
@@ -41,12 +66,37 @@ export class ManutencaoCorretivaService {
   async update(
     id: number,
     updateManutencaoCorretivaDto: UpdateManutencaoCorretivaDto,
-  ): Promise<ManutencaoCorretiva> {
+  ): Promise<ManutencoesCorretivas> {
     const manutencaoCorretiva = await this.findOne(id);
-    this.manutencaoCorretivaRepository.merge(
-      manutencaoCorretiva,
-      updateManutencaoCorretivaDto,
-    );
+
+    if (updateManutencaoCorretivaDto.oficinaId) {
+      const oficina = await this.oficinaRepository.findOne({
+        where: { id: updateManutencaoCorretivaDto.oficinaId },
+      });
+      if (!oficina) {
+        throw new NotFoundException('Oficina não encontrada');
+      }
+      manutencaoCorretiva.oficinaId = oficina;
+    }
+
+    if (updateManutencaoCorretivaDto.veiculoId) {
+      const veiculo = await this.veiculoRepository.findOne({
+        where: { id: updateManutencaoCorretivaDto.veiculoId },
+      });
+      if (!veiculo) {
+        throw new NotFoundException('Veículo não encontrado');
+      }
+      manutencaoCorretiva.veiculoId = veiculo;
+    }
+
+    if (updateManutencaoCorretivaDto.data)
+      manutencaoCorretiva.data = new Date(updateManutencaoCorretivaDto.data);
+    if (updateManutencaoCorretivaDto.kmManutencao !== undefined)
+      manutencaoCorretiva.kmManutencao =
+        updateManutencaoCorretivaDto.kmManutencao;
+    if (updateManutencaoCorretivaDto.valorTotal !== undefined)
+      manutencaoCorretiva.valorTotal = updateManutencaoCorretivaDto.valorTotal;
+
     return await this.manutencaoCorretivaRepository.save(manutencaoCorretiva);
   }
 

@@ -2,12 +2,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Endereco {
+export class Enderecos {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'rua' })
-  rua: string;
+  @Column({ name: 'logradouro' })
+  logradouro: string;
 
   @Column({ name: 'numero' })
   numero: string;
@@ -20,9 +20,6 @@ export class Endereco {
 
   @Column({ name: 'estado' })
   estado: string;
-
-  @Column({ name: 'pais' })
-  pais: string;
 
   @Column({ name: 'cep' })
   cep: string;

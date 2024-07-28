@@ -5,11 +5,13 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  ManyToOne,
+  ManyToMany,
 } from 'typeorm';
-import { Endereco } from 'src/endereco/entities/endereco.entity';
+import { Enderecos } from 'src/endereco/entities/endereco.entity';
 
 @Entity()
-export class Oficina {
+export class Oficinas {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,7 +21,7 @@ export class Oficina {
   @Column({ name: 'razaoSocial' })
   razaoSocial: string;
 
-  @OneToOne(() => Endereco)
-  @JoinColumn({ name: 'endereco_id' })
-  endereco: Endereco;
+  @ManyToOne(() => Enderecos)
+  @JoinColumn({ name: 'enderecoId' })
+  enderecoId: Enderecos;
 }

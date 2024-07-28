@@ -9,5 +9,5 @@ export class CreateSeguradoraDto {
   razaoSocial: string;
 
   @ApiProperty()
-  endereco_id: number;
+  enderecoId: number;
 }

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateSeguroDto {
   @ApiProperty()
-  seguradora_id: number;
+  seguradoraId: number;
 
   @ApiProperty()
   numeroContrato: string;
@@ -15,5 +15,5 @@ export class CreateSeguroDto {
   valorMensal: number;
 
   @ApiProperty()
-  veiculo_id: number;
+  veiculoId: number;
 }

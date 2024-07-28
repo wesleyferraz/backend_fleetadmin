@@ -7,7 +7,4 @@ export class CreatePecaDto {
 
   @ApiProperty()
   descricao: string;
-
-  @ApiProperty()
-  valor: number;
 }

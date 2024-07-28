@@ -1,15 +1,16 @@
-// seguradora.entity.ts
+// seguradoras.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
-import { Endereco } from 'src/endereco/entities/endereco.entity';
+import { Enderecos } from 'src/endereco/entities/endereco.entity';
 
 @Entity()
-export class Seguradora {
+export class Seguradoras {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,7 +20,7 @@ export class Seguradora {
   @Column({ name: 'razaoSocial' })
   razaoSocial: string;
 
-  @OneToOne(() => Endereco)
-  @JoinColumn({ name: 'endereco_id' })
-  endereco: Endereco;
+  @ManyToOne(() => Enderecos)
+  @JoinColumn({ name: 'enderecoId' })
+  enderecoId: Enderecos;
 }

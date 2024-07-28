@@ -3,6 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMotoristaDto {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   cpf: string;
 
   @ApiProperty()
@@ -15,14 +18,17 @@ export class CreateMotoristaDto {
   sobrenome: string;
 
   @ApiProperty()
-  endereco_id: number;
+  enderecoId: number;
 
   @ApiProperty()
   celular: string;
 
   @ApiProperty()
-  foto_path: string;
+  numeroRegistroCnh: number;
 
   @ApiProperty()
-  certificacoes_id: string;
+  categoriaCnh: string;
+
+  @ApiProperty()
+  dataVencimentoCnh: Date;
 }

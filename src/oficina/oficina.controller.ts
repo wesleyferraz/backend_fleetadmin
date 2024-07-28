@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { OficinaService } from './oficina.service';
 import { CreateOficinaDto } from './dto/create-oficina.dto';
 import { UpdateOficinaDto } from './dto/update-oficina.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Oficina')
+//@UseGuards(JwtAuthGuard)
 @Controller('oficina')
 export class OficinaController {
   constructor(private readonly oficinaService: OficinaService) {}

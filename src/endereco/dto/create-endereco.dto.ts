@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateEnderecoDto {
   @ApiProperty()
-  rua: string;
+  logradouro: string;
 
   @ApiProperty()
   numero: string;
@@ -16,9 +16,6 @@ export class CreateEnderecoDto {
 
   @ApiProperty()
   estado: string;
-
-  @ApiProperty()
-  pais: string;
 
   @ApiProperty()
   cep: string;

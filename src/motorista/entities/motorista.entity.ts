@@ -3,13 +3,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
-import { Endereco } from 'src/endereco/entities/endereco.entity';
+import { Enderecos } from 'src/endereco/entities/endereco.entity';
 
 @Entity()
-export class Motorista {
+export class Motoristas {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,16 +25,19 @@ export class Motorista {
   @Column({ name: 'sobrenome' })
   sobrenome: string;
 
-  @OneToOne(() => Endereco)
-  @JoinColumn({ name: 'endereco_id' })
-  endereco: Endereco;
+  @ManyToOne(() => Enderecos)
+  @JoinColumn({ name: 'enderecoId' })
+  enderecoId: Enderecos;
 
   @Column({ name: 'celular' })
   celular: string;
 
-  @Column({ name: 'foto_path', nullable: true })
-  fotoPath: string;
+  @Column()
+  numeroRegistroCnh: number;
 
-  @Column({ name: 'certificacoes_id' })
-  certificacoesId: string;
+  @Column()
+  categoriaCnh: string;
+
+  @Column()
+  dataVencimentoCnh: Date;
 }

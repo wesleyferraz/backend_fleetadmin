@@ -1,10 +1,16 @@
 // manutencao-corretiva.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Oficina } from 'src/oficina/entities/oficina.entity';
-import { Veiculo } from 'src/veiculo/entities/veiculo.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Oficinas } from 'src/oficina/entities/oficina.entity';
+import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
 
 @Entity()
-export class ManutencaoCorretiva {
+export class ManutencoesCorretivas {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,9 +23,11 @@ export class ManutencaoCorretiva {
   @Column({ name: 'valorTotal', type: 'decimal', precision: 10, scale: 2 })
   valorTotal: number;
 
-  @ManyToOne(() => Oficina, (oficina) => oficina.id)
-  oficina: Oficina;
+  @ManyToOne(() => Oficinas)
+  @JoinColumn({ name: 'oficinaId' })
+  oficinaId: Oficinas;
 
-  @ManyToOne(() => Veiculo, (veiculo) => veiculo.id)
-  veiculo: Veiculo;
+  @ManyToOne(() => Veiculos)
+  @JoinColumn({ name: 'veiculoId' })
+  veiculoId: Veiculos;
 }

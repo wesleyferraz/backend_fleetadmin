@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Veiculo {
+export class Veiculos {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,6 +20,9 @@ export class Veiculo {
 
   @Column({ name: 'cor' })
   cor: string;
+
+  @Column({ name: 'tipoEixo' })
+  tipoEixo: string;
 
   @Column({ name: 'anoFabricacao' })
   anoFabricacao: number;

@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Peca {
+export class Pecas {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,7 +11,4 @@ export class Peca {
 
   @Column({ name: 'descricao' })
   descricao: string;
-
-  @Column({ name: 'valor', type: 'decimal', precision: 10, scale: 2 })
-  valor: number;
 }

@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CnhModule } from './cnh/cnh.module';
 import { EnderecoModule } from './endereco/endereco.module';
-import { InfracaoModule } from './infracao/infracao.module';
 import { ManutencaoCorretivaModule } from './manutencao-corretiva/manutencao-corretiva.module';
-import { ManutencaoPreventivaModule } from './manutencao-preventiva/manutencao-preventiva.module';
 import { MotoristaModule } from './motorista/motorista.module';
 import { OficinaModule } from './oficina/oficina.module';
 import { PecaModule } from './peca/peca.module';
 import { PecaTrocaCorretivaModule } from './peca-troca-corretiva/peca-troca-corretiva.module';
-import { PecaTrocaPreventivaModule } from './peca-troca-preventiva/peca-troca-preventiva.module';
 import { SeguradoraModule } from './seguradora/seguradora.module';
 import { SeguroModule } from './seguro/seguro.module';
-import { ServicoManutencaoModule } from './servico-manutencao/servico-manutencao.module';
-import { ServicoRealizadoCorretivaModule } from './servico-realizado-corretiva/servico-realizado-corretiva.module';
-import { ServicoRealizadoPreventivaModule } from './servico-realizado-preventiva/servico-realizado-preventiva.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { VeiculoModule } from './veiculo/veiculo.module';
+import { FaturamentoModule } from './faturamento/faturamento.module';
+import { FornecedorModule } from './fornecedor/fornecedor.module';
+import { PostoModule } from './posto/posto.module';
+import { CombustivelModule } from './combustivel/combustivel.module';
+import { PneuModule } from './pneu/pneu.module';
+import { AuthModule } from './auth/auth.module';
+import { OleoModule } from './oleo/oleo.module';
+import { OleoTrocaCorretivaModule } from './oleo-troca-corretiva/oleo-troca-corretiva.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -31,23 +34,30 @@ import { VeiculoModule } from './veiculo/veiculo.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    CnhModule,
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'src/.env', // Caminho para o seu arquivo .env
+    }),
+
     EnderecoModule,
-    InfracaoModule,
     ManutencaoCorretivaModule,
-    ManutencaoPreventivaModule,
     MotoristaModule,
     OficinaModule,
     PecaModule,
     PecaTrocaCorretivaModule,
-    PecaTrocaPreventivaModule,
     SeguradoraModule,
     SeguroModule,
-    ServicoManutencaoModule,
-    ServicoRealizadoCorretivaModule,
-    ServicoRealizadoPreventivaModule,
     UserAdminModule,
     VeiculoModule,
+    FaturamentoModule,
+    FornecedorModule,
+    PostoModule,
+    CombustivelModule,
+    PneuModule,
+    AuthModule,
+    OleoModule,
+    OleoTrocaCorretivaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

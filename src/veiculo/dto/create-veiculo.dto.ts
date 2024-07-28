@@ -18,6 +18,9 @@ export class CreateVeiculoDto {
   cor: string;
 
   @ApiProperty()
+  tipoEixo: string;
+
+  @ApiProperty()
   anoFabricacao: number;
 
   @ApiProperty()

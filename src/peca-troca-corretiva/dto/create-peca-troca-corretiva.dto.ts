@@ -1,13 +1,19 @@
 // create-peca-troca-corretiva.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePecaTrocaCorretivaDto {
+export class CreatePecaTrocadaCorretivaDto {
   @ApiProperty()
-  manutencao_corretiva_id: number;
+  manutencaoCorretivaId: number;
 
   @ApiProperty()
-  peca_id: number;
+  pecaId: number;
 
   @ApiProperty()
-  valor: number;
+  quantidade: number;
+
+  @ApiProperty()
+  valorUnitario: number;
+
+  @ApiProperty()
+  valorTotal: number;
 }
