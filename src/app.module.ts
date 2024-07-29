@@ -21,6 +21,7 @@ import { PneuModule } from './pneu/pneu.module';
 import { AuthModule } from './auth/auth.module';
 import { OleoModule } from './oleo/oleo.module';
 import { OleoTrocaCorretivaModule } from './oleo-troca-corretiva/oleo-troca-corretiva.module';
+import { OverviewModule } from './overview/overview.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { OleoTrocaCorretivaModule } from './oleo-troca-corretiva/oleo-troca-corr
     AuthModule,
     OleoModule,
     OleoTrocaCorretivaModule,
+    OverviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
