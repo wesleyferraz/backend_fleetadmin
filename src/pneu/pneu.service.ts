@@ -137,7 +137,6 @@ export class PneuService {
     });
 
     if (!existingPneu) {
-      console.log('Pneu not found: ID:', veiculoId, 'Position:', posicao);
       return;
     }
 

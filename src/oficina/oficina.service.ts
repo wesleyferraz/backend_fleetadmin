@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Oficinas } from './entities/oficina.entity';
 import { CreateOficinaDto } from './dto/create-oficina.dto';
 import { UpdateOficinaDto } from './dto/update-oficina.dto';
 import { Enderecos } from 'src/endereco/entities/endereco.entity';
+import axios from 'axios';
 
 @Injectable()
 export class OficinaService {
@@ -76,5 +77,68 @@ export class OficinaService {
   async remove(id: number): Promise<void> {
     const oficina = await this.findOne(id);
     await this.oficinaRepository.remove(oficina);
+  }
+
+  async consultarCNPJ(cnpj: string): Promise<any> {
+    try {
+      const response = await axios.get(
+        `https://api-publica.speedio.com.br/buscarcnpj?cnpj=${cnpj}`,
+      );
+      const data = response.data;
+
+      if (data?.erro) {
+        return new HttpException('CNPJ não encontrado', 404);
+      }
+
+      const endereco = new Enderecos();
+      endereco.bairro = data['BAIRRO'];
+      endereco.cep = data['CEP'];
+      endereco.estado = this.obterNomeUF(data['UF']);
+      endereco.logradouro = `${data['TIPO LOGRADOURO']} ${data['LOGRADOURO']}`;
+      endereco.numero = data['NUMERO'];
+      endereco.municipio = data['MUNICIPIO'];
+
+      const oficina = new Oficinas();
+      oficina.cnpj = data['CNPJ'];
+      oficina.razaoSocial = data['RAZAO SOCIAL'];
+      oficina.enderecoId = endereco;
+
+      return oficina;
+    } catch (error) {
+      throw new Error('CNPJ not found');
+    }
+  }
+
+  obterNomeUF(sigla: string): string {
+    const ufs: { [key: string]: string } = {
+      AC: 'Acre',
+      AL: 'Alagoas',
+      AP: 'Amapá',
+      AM: 'Amazonas',
+      BA: 'Bahia',
+      CE: 'Ceará',
+      DF: 'Distrito Federal',
+      ES: 'Espírito Santo',
+      GO: 'Goiás',
+      MA: 'Maranhão',
+      MT: 'Mato Grosso',
+      MS: 'Mato Grosso do Sul',
+      MG: 'Minas Gerais',
+      PA: 'Pará',
+      PB: 'Paraíba',
+      PR: 'Paraná',
+      PE: 'Pernambuco',
+      PI: 'Piauí',
+      RJ: 'Rio de Janeiro',
+      RN: 'Rio Grande do Norte',
+      RS: 'Rio Grande do Sul',
+      RO: 'Rondônia',
+      RR: 'Roraima',
+      SC: 'Santa Catarina',
+      SP: 'São Paulo',
+      SE: 'Sergipe',
+      TO: 'Tocantins',
+    };
+    return ufs[sigla] || '';
   }
 }

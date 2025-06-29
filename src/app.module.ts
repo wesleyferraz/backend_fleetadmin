@@ -13,32 +13,35 @@ import { SeguradoraModule } from './seguradora/seguradora.module';
 import { SeguroModule } from './seguro/seguro.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { VeiculoModule } from './veiculo/veiculo.module';
-import { FaturamentoModule } from './faturamento/faturamento.module';
+import { ViagemModule } from './viagem/viagem.module';
 import { FornecedorModule } from './fornecedor/fornecedor.module';
 import { PostoModule } from './posto/posto.module';
-import { CombustivelModule } from './combustivel/combustivel.module';
+import { AbastecimentoModule } from './abastecimento/abastecimento.module';
 import { PneuModule } from './pneu/pneu.module';
 import { AuthModule } from './auth/auth.module';
 import { OleoModule } from './oleo/oleo.module';
 import { OleoTrocaCorretivaModule } from './oleo-troca-corretiva/oleo-troca-corretiva.module';
 import { OverviewModule } from './overview/overview.module';
+import { AlertModule } from './alert/alert.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'srv1308.hstgr.io',
-      port: 3306,
-      username: 'u667470076_admin',
-      password: 'lagoanova@BA-2024!-db',
-      database: 'u667470076_db_fleetadmin',
+      host: process.env.DATABASE_HOST || 'srv1308.hstgr.io',
+      port: Number(process.env.DATABASE_PORT) || 3306,
+      username: process.env.DATABASE_USERNAME || 'u667470076_bd_admin',
+      password: process.env.DATABASE_PASSWORD || 'uQjCpCjik9eIgvE',
+      database: process.env.DATABASE_NAME || 'u667470076_i7_gestao',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
 
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'src/.env', // Caminho para o seu arquivo .env
+      envFilePath: '.env', // Verifique se este caminho corresponde ao seu arquivo .env
     }),
 
     EnderecoModule,
@@ -51,15 +54,18 @@ import { OverviewModule } from './overview/overview.module';
     SeguroModule,
     UserAdminModule,
     VeiculoModule,
-    FaturamentoModule,
+    ViagemModule,
     FornecedorModule,
     PostoModule,
-    CombustivelModule,
+    AbastecimentoModule,
     PneuModule,
     AuthModule,
     OleoModule,
     OleoTrocaCorretivaModule,
     OverviewModule,
+    AlertModule,
+    ScheduleModule.forRoot(),
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

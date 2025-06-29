@@ -2,16 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
-import { Combustivel } from './entities/combustivel.entity';
-import { CreateCombustivelDto } from './dto/createCombustivel.dto';
-import { UpdateCombustivelDto } from './dto/updateCombustivel.dto';
+import { Abastecimento } from './entities/abastecimento.entity';
+import { CreateAbastecimentoDto } from './dto/createAbastecimento.dto';
+import { UpdateAbastecimentoDto } from './dto/updateAbastecimento.dto';
 import { Postos } from 'src/posto/entities/postos.entity';
 
 @Injectable()
-export class CombustivelService {
+export class AbastecimentoService {
   constructor(
-    @InjectRepository(Combustivel)
-    private combustivelRepository: Repository<Combustivel>,
+    @InjectRepository(Abastecimento)
+    private abastecimentoRepository: Repository<Abastecimento>,
     @InjectRepository(Postos)
     private postosRepository: Repository<Postos>,
     @InjectRepository(Veiculos)
@@ -19,9 +19,10 @@ export class CombustivelService {
   ) {}
 
   async create(
-    CreateCombustivelDto: CreateCombustivelDto,
-  ): Promise<Combustivel> {
-    const { posto_id, veiculo_id, ...CombustivelData } = CreateCombustivelDto;
+    CreateAbastecimentoDto: CreateAbastecimentoDto,
+  ): Promise<Abastecimento> {
+    const { posto_id, veiculo_id, ...AbastecimentoData } =
+      CreateAbastecimentoDto;
 
     const posto = await this.postosRepository.findOne({
       where: { id: posto_id },
@@ -37,46 +38,45 @@ export class CombustivelService {
       throw new NotFoundException(`Veiculo #${veiculo_id} not found`);
     }
 
-    const combustivel = this.combustivelRepository.create({
-      ...CombustivelData,
+    const abastecimento = this.abastecimentoRepository.create({
+      ...AbastecimentoData,
       posto,
       veiculo,
     });
 
-    console.log('Valor:', combustivel);
-
-    return this.combustivelRepository.save(combustivel);
+    return this.abastecimentoRepository.save(abastecimento);
   }
 
-  async findAll(): Promise<Combustivel[]> {
-    return this.combustivelRepository.find({
+  async findAll(): Promise<Abastecimento[]> {
+    return this.abastecimentoRepository.find({
       relations: ['posto', 'veiculo'],
     });
   }
 
-  async findOne(id: number): Promise<Combustivel> {
-    const combustivel = await this.combustivelRepository.findOne({
+  async findOne(id: number): Promise<Abastecimento> {
+    const abastecimento = await this.abastecimentoRepository.findOne({
       where: { id },
       relations: ['posto', 'veiculo'],
     });
-    if (!combustivel) {
-      throw new NotFoundException(`Combustivel #${id} not found`);
+    if (!abastecimento) {
+      throw new NotFoundException(`Abastecimento #${id} not found`);
     }
-    return combustivel;
+    return abastecimento;
   }
 
   async update(
     id: number,
-    UpdateCombustivelDto: UpdateCombustivelDto,
-  ): Promise<Combustivel> {
-    const { posto_id, veiculo_id, ...CombustivelData } = UpdateCombustivelDto;
+    UpdateAbastecimentoDto: UpdateAbastecimentoDto,
+  ): Promise<Abastecimento> {
+    const { posto_id, veiculo_id, ...AbastecimentoData } =
+      UpdateAbastecimentoDto;
 
-    const combustivel = await this.combustivelRepository.preload({
+    const abastecimento = await this.abastecimentoRepository.preload({
       id,
-      ...CombustivelData,
+      ...AbastecimentoData,
     });
-    if (!combustivel) {
-      throw new NotFoundException(`Combustivel #${id} not found`);
+    if (!abastecimento) {
+      throw new NotFoundException(`Abastecimento #${id} not found`);
     }
 
     if (posto_id) {
@@ -86,7 +86,7 @@ export class CombustivelService {
       if (!posto) {
         throw new NotFoundException(`Posto #${posto_id} not found`);
       }
-      combustivel.posto = posto;
+      abastecimento.posto = posto;
     }
 
     if (veiculo_id) {
@@ -96,14 +96,14 @@ export class CombustivelService {
       if (!veiculo) {
         throw new NotFoundException(`Veiculo #${veiculo_id} not found`);
       }
-      combustivel.veiculo = veiculo;
+      abastecimento.veiculo = veiculo;
     }
 
-    return this.combustivelRepository.save(combustivel);
+    return this.abastecimentoRepository.save(abastecimento);
   }
 
   async remove(id: number): Promise<void> {
-    const combustivel = await this.findOne(id);
-    await this.combustivelRepository.remove(combustivel);
+    const abastecimento = await this.findOne(id);
+    await this.abastecimentoRepository.remove(abastecimento);
   }
 }

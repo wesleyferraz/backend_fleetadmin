@@ -9,6 +9,9 @@ export class CreateManutencaoCorretivaDto {
   kmManutencao: number;
 
   @ApiProperty()
+  kmProximaManutencao: number;
+
+  @ApiProperty()
   valorTotal: number;
 
   @ApiProperty()

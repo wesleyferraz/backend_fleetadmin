@@ -10,13 +10,16 @@ import { Motoristas } from 'src/motorista/entities/motorista.entity';
 import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
 
 @Entity()
-export class Faturamento {
+export class Viagem {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Fornecedor)
   @JoinColumn({ name: 'fornecedorId' })
   fornecedor: Fornecedor;
+
+  @Column()
+  notaFiscal: string;
 
   @Column()
   origem: string;
@@ -36,10 +39,20 @@ export class Faturamento {
   @Column({ name: 'valorTotal', type: 'decimal', precision: 10, scale: 2 })
   valorTotal: number;
 
-  @Column({ name: 'kmRodados', type: 'decimal', precision: 10, scale: 2 })
-  kmRodados: number;
+  @Column({
+    name: 'volumeTransportado',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  })
+  volumeTransportado: number;
 
-  @Column({ name: 'remuneracaoMotorista', type: 'decimal', precision: 10, scale: 2 })
+  @Column({
+    name: 'remuneracaoMotorista',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  })
   remuneracaoMotorista: number;
 
   @ManyToOne(() => Motoristas)

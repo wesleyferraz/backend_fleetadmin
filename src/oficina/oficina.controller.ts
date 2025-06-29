@@ -11,7 +11,7 @@ import {
 import { OficinaService } from './oficina.service';
 import { CreateOficinaDto } from './dto/create-oficina.dto';
 import { UpdateOficinaDto } from './dto/update-oficina.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Oficina')
@@ -35,6 +35,12 @@ export class OficinaController {
     return this.oficinaService.findOne(+id);
   }
 
+  @Get('consultarcnpj/:cnpj')
+  @ApiOperation({ summary: 'Consultar CNPJ' })
+  @ApiParam({ name: 'cnpj', type: 'number', description: 'CNPJ' })
+  consultarCEP(@Param('cnpj') cnpj: string) {
+    return this.oficinaService.consultarCNPJ(cnpj);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOficinaDto: UpdateOficinaDto) {
     return this.oficinaService.update(+id, updateOficinaDto);

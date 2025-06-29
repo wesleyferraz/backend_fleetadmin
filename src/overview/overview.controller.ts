@@ -1,30 +1,83 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { OverviewService } from './overview.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('overview') // Corrigido para convenção comum
+@ApiTags('Overview')
+@Controller('overview')
 export class OverviewController {
-  constructor(private readonly overviewService: OverviewService) {}
+  constructor(private readonly despesasService: OverviewService) {}
 
-  @Get('faturamento-despesas')
-  async getFaturamentoDespesas(
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-    @Query('veiculoIds') veiculoIds?: string,
-    @Query('includeCombustivel') includeCombustivel: string = 'true',
-    @Query('includeManutencao') includeManutencao: string = 'true',
-    @Query('includeSeguro') includeSeguro: string = 'true',
+  @Get('despesas')
+  async getDespesas(
+    @Query('veiculoId') veiculoId: number,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const veiculoIdsArray = veiculoIds
-      ? veiculoIds.split(',').map((id) => parseInt(id, 10))
-      : [];
+    // Verifica se todos os parâmetros obrigatórios foram passados
+    if (!veiculoId || !startDate || !endDate) {
+      throw new Error(
+        'Parâmetros inválidos. Veículo ID, startDate e endDate são obrigatórios.',
+      );
+    }
 
-    return this.overviewService.getConsolidatedData(
+    // Chama o serviço para obter as despesas
+    return this.despesasService.getDespesasByVeiculoId(
+      veiculoId,
       startDate,
       endDate,
-      veiculoIdsArray,
-      includeCombustivel === 'true',
-      includeManutencao === 'true',
-      includeSeguro === 'true',
     );
+  }
+
+  @Get('alldespesas')
+  async getAllDespesas(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    // Verifica se todos os parâmetros obrigatórios foram passados
+    if (!startDate || !endDate) {
+      throw new Error(
+        'Parâmetros inválidos. Veículo ID, startDate e endDate são obrigatórios.',
+      );
+    }
+
+    // Chama o serviço para obter as despesas
+    return this.despesasService.getAllDespesas(startDate, endDate);
+  }
+
+  @Get('faturamento')
+  async getFaturamento(
+    @Query('veiculoId') veiculoId: number,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    // Verifica se todos os parâmetros obrigatórios foram passados
+    if (!veiculoId || !startDate || !endDate) {
+      throw new Error(
+        'Parâmetros inválidos. Veículo ID, startDate e endDate são obrigatórios.',
+      );
+    }
+
+    // Chama o serviço para obter as despesas
+    return this.despesasService.getFaturamentoByVeiculoId(
+      veiculoId,
+      startDate,
+      endDate,
+    );
+  }
+
+  @Get('allfaturamento')
+  async getAllFaturamento(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    // Verifica se todos os parâmetros obrigatórios foram passados
+    if (!startDate || !endDate) {
+      throw new Error(
+        'Parâmetros inválidos. Veículo ID, startDate e endDate são obrigatórios.',
+      );
+    }
+
+    // Chama o serviço para obter as despesas
+    return this.despesasService.getAllFaturamento(startDate, endDate);
   }
 }

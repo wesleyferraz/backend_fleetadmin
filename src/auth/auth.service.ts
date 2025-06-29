@@ -34,4 +34,8 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(senha, 10);
     return this.usersService.create(nome, email, hashedPassword);
   }
+
+  async resetPassword(email: string, newPassword: string): Promise<boolean> {
+    return this.usersService.resetPassword(email, newPassword);
+  }
 }

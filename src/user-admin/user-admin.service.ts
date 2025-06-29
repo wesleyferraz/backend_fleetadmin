@@ -26,4 +26,15 @@ export class UsersAdminService {
   async findOneByEmail(email: string): Promise<UsersAdmin | undefined> {
     return this.usersRepository.findOne({ where: { email } });
   }
+
+  async resetPassword(email: string, newPassword: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) return false;
+
+    user.senha = newPassword;
+
+    await this.usersRepository.save(user);
+    return true;
+  }
 }

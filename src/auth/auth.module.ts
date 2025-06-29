@@ -17,8 +17,8 @@ import { ApiKeyStrategy } from './api-key.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '3600s' },
+        secret: 'secret-key',
+        signOptions: { expiresIn: '1d' },
       }),
       inject: [ConfigService],
     }),

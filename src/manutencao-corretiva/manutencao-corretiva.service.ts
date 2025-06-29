@@ -36,6 +36,8 @@ export class ManutencaoCorretivaService {
     manutencaoCorretiva.data = new Date(createManutencaoCorretivaDto.data);
     manutencaoCorretiva.kmManutencao =
       createManutencaoCorretivaDto.kmManutencao;
+    manutencaoCorretiva.kmProximaManutencao =
+      createManutencaoCorretivaDto.kmProximaManutencao;
     manutencaoCorretiva.valorTotal = createManutencaoCorretivaDto.valorTotal;
     manutencaoCorretiva.oficinaId = oficina;
     manutencaoCorretiva.veiculoId = veiculo;
@@ -45,7 +47,14 @@ export class ManutencaoCorretivaService {
 
   async findAll(): Promise<ManutencoesCorretivas[]> {
     return await this.manutencaoCorretivaRepository.find({
-      relations: ['veiculoId', 'oficinaId'],
+      relations: [
+        'veiculoId',
+        'oficinaId',
+        'pecasTrocadasCorretiva',
+        'pecasTrocadasCorretiva.peca',
+        'oleoTrocadoCorretiva',
+        'oleoTrocadoCorretiva.oleo',
+      ],
     });
   }
 
@@ -53,7 +62,14 @@ export class ManutencaoCorretivaService {
     const manutencaoCorretiva =
       await this.manutencaoCorretivaRepository.findOne({
         where: { id },
-        relations: ['veiculoId', 'oficinaId'],
+        relations: [
+          'veiculoId',
+          'oficinaId',
+          'pecasTrocadasCorretiva',
+          'pecasTrocadasCorretiva.peca',
+          'oleoTrocadoCorretiva',
+          'oleoTrocadoCorretiva.oleo', // Inclui a relação com Oleo
+        ],
       });
     if (!manutencaoCorretiva) {
       throw new NotFoundException(

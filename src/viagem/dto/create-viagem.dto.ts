@@ -1,7 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
-export class CreateFaturamentoDto {
+export class CreateViagemDto {
+  @IsString()
+  @ApiProperty()
+  notaFiscal: string;
+
   @IsString()
   @ApiProperty()
   origem: string;
@@ -28,7 +32,7 @@ export class CreateFaturamentoDto {
 
   @IsNumber()
   @ApiProperty()
-  kmRodados: number;
+  volumeTransportado: number;
 
   @IsNumber()
   @ApiProperty()

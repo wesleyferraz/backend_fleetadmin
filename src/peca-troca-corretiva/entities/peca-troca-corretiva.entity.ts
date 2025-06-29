@@ -14,12 +14,11 @@ export class PecasTrocadasCorretiva {
   id: number;
 
   @ManyToOne(() => ManutencoesCorretivas)
-  @JoinColumn({ name: 'manutencaoCorretivaId' })
   manutencaoCorretiva: ManutencoesCorretivas;
 
-  @ManyToOne(() => Pecas, (peca) => peca.id)
-  @JoinColumn({ name: 'pecaId' })
-  peca: Pecas;
+  @ManyToOne(() => Pecas) // Adiciona a relação com a entidade Oleo
+  @JoinColumn({ name: 'pecaId' }) // Define a coluna que faz a referência ao óleo
+  peca: Pecas; // Relacionamento com o óleo trocado
 
   @Column({ name: 'quantidade', type: 'decimal', precision: 10, scale: 2 })
   quantidade: number;

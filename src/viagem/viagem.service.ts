@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Faturamento } from './entity/faturamento.entity';
+import { Viagem } from './entity/viagem.entity';
 import { Fornecedor } from 'src/fornecedor/entities/fornecedor.entity';
 import { Motoristas } from 'src/motorista/entities/motorista.entity';
-import { CreateFaturamentoDto } from './dto/create-faturamento.dto';
-import { UpdateFaturamentoDto } from './dto/update-faturamento.dto';
+import { CreateViagemDto } from './dto/create-viagem.dto';
+import { UpdateViagemDto } from './dto/update-viagem.dto';
 import { Veiculos } from 'src/veiculo/entities/veiculo.entity';
 
 @Injectable()
-export class FaturamentoService {
+export class ViagemService {
   constructor(
-    @InjectRepository(Faturamento)
-    private faturamentoRepository: Repository<Faturamento>,
+    @InjectRepository(Viagem)
+    private viagemRepository: Repository<Viagem>,
     @InjectRepository(Fornecedor)
     private fornecedorRepository: Repository<Fornecedor>,
     @InjectRepository(Motoristas)
@@ -21,11 +21,9 @@ export class FaturamentoService {
     private veiculoRepository: Repository<Veiculos>,
   ) {}
 
-  async create(
-    createFaturamentoDto: CreateFaturamentoDto,
-  ): Promise<Faturamento> {
-    const { fornecedorId, motoristaId, veiculoId, ...faturamentoData } =
-      createFaturamentoDto;
+  async create(createViagemDto: CreateViagemDto): Promise<Viagem> {
+    const { fornecedorId, motoristaId, veiculoId, ...viagemData } =
+      createViagemDto;
 
     const fornecedor = await this.fornecedorRepository.findOne({
       where: { id: fornecedorId },
@@ -48,46 +46,43 @@ export class FaturamentoService {
       throw new NotFoundException(`Veiculo #${veiculoId} not found`);
     }
 
-    const faturamento = this.faturamentoRepository.create({
-      ...faturamentoData,
+    const viagem = this.viagemRepository.create({
+      ...viagemData,
       fornecedor,
       motorista,
       veiculo,
     });
 
-    return this.faturamentoRepository.save(faturamento);
+    return this.viagemRepository.save(viagem);
   }
 
-  async findAll(): Promise<Faturamento[]> {
-    return this.faturamentoRepository.find({
+  async findAll(): Promise<Viagem[]> {
+    return this.viagemRepository.find({
       relations: ['fornecedor', 'motorista', 'veiculo'],
     });
   }
 
-  async findOne(id: number): Promise<Faturamento> {
-    const faturamento = await this.faturamentoRepository.findOne({
+  async findOne(id: number): Promise<Viagem> {
+    const viagem = await this.viagemRepository.findOne({
       where: { id },
       relations: ['fornecedor', 'motorista', 'veiculo'],
     });
-    if (!faturamento) {
-      throw new NotFoundException(`Faturamento #${id} not found`);
+    if (!viagem) {
+      throw new NotFoundException(`Viagem #${id} not found`);
     }
-    return faturamento;
+    return viagem;
   }
 
-  async update(
-    id: number,
-    updateFaturamentoDto: UpdateFaturamentoDto,
-  ): Promise<Faturamento> {
-    const { fornecedorId, motoristaId, veiculoId, ...faturamentoData } =
-      updateFaturamentoDto;
+  async update(id: number, updateViagemDto: UpdateViagemDto): Promise<Viagem> {
+    const { fornecedorId, motoristaId, veiculoId, ...viagemData } =
+      updateViagemDto;
 
-    const faturamento = await this.faturamentoRepository.preload({
+    const viagem = await this.viagemRepository.preload({
       id,
-      ...faturamentoData,
+      ...viagemData,
     });
-    if (!faturamento) {
-      throw new NotFoundException(`Faturamento #${id} not found`);
+    if (!viagem) {
+      throw new NotFoundException(`Viagem #${id} not found`);
     }
 
     if (fornecedorId) {
@@ -97,7 +92,7 @@ export class FaturamentoService {
       if (!fornecedor) {
         throw new NotFoundException(`Fornecedor #${fornecedorId} not found`);
       }
-      faturamento.fornecedor = fornecedor;
+      viagem.fornecedor = fornecedor;
     }
 
     if (motoristaId) {
@@ -107,7 +102,7 @@ export class FaturamentoService {
       if (!motorista) {
         throw new NotFoundException(`Motorista #${motoristaId} not found`);
       }
-      faturamento.motorista = motorista;
+      viagem.motorista = motorista;
     }
 
     if (veiculoId) {
@@ -117,14 +112,14 @@ export class FaturamentoService {
       if (!veiculo) {
         throw new NotFoundException(`Fornecedor #${veiculoId} not found`);
       }
-      faturamento.veiculo = veiculo;
+      viagem.veiculo = veiculo;
     }
 
-    return this.faturamentoRepository.save(faturamento);
+    return this.viagemRepository.save(viagem);
   }
 
   async remove(id: number): Promise<void> {
-    const faturamento = await this.findOne(id);
-    await this.faturamentoRepository.remove(faturamento);
+    const viagem = await this.findOne(id);
+    await this.viagemRepository.remove(viagem);
   }
 }

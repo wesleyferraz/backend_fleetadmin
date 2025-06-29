@@ -34,6 +34,11 @@ export class FornecedorController {
     return this.FornecedorService.findOne(+id);
   }
 
+  @Get(':cnpj')
+  findCNPJ(@Param('cnpj') cnpj: string) {
+    return `https://api-publica.speedio.com.br/buscarcnpj?cnpj=${+cnpj}`;
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

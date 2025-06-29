@@ -36,4 +36,19 @@ export class AuthController {
     const { nome, email, senha } = body;
     return this.authService.register(nome, email, senha);
   }
+
+  @Post('reset')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string' },
+        senha: { type: 'string' },
+      },
+    },
+  })
+  async reset(@Body() body) {
+    const { nome, senha } = body;
+    return this.authService.resetPassword(nome, senha);
+  }
 }
